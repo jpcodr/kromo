@@ -6,10 +6,12 @@ class ColorField extends ConsumerStatefulWidget {
   const ColorField({
     super.key,
     required this.color,
+    this.enabled = true,
     required this.onColorChanged,
   });
 
   final Color? color;
+  final bool enabled;
   final void Function(Color?) onColorChanged;
 
   @override
@@ -24,8 +26,9 @@ class _ColorFieldState extends ConsumerState<ColorField> {
   void initState() {
     super.initState();
     selectedColor = widget.color ?? Colors.white;
-    _controller =
-        TextEditingController(text: ColorTools.nameThatColor(selectedColor));
+    _controller = TextEditingController(
+        text:
+            '${ColorTools.nameThatColor(selectedColor)} (#${selectedColor.hex})');
   }
 
   @override
@@ -37,14 +40,25 @@ class _ColorFieldState extends ConsumerState<ColorField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      enabled: widget.enabled,
       canRequestFocus: false,
       decoration: InputDecoration(
         hintText: 'Selecciona un color',
-        suffix: ColorIndicator(
-          color: selectedColor,
+        suffix: SizedBox(
           height: 20.0,
           width: 20.0,
-          borderRadius: 0,
+          child: Stack(
+            children: [
+              ColorIndicator(
+                color: selectedColor,
+                borderRadius: 0,
+              ),
+              if (!widget.enabled)
+                Container(
+                  color: Colors.black.withOpacity(0.7),
+                )
+            ],
+          ),
         ),
       ),
       controller: _controller,
@@ -64,10 +78,20 @@ class _ColorFieldState extends ConsumerState<ColorField> {
           onColorChanged: (value) {
             setState(() {
               selectedColor = value;
-              _controller.text = ColorTools.nameThatColor(value);
+              _controller.text =
+                  '${ColorTools.nameThatColor(value)} (${value.hex})';
             });
           },
-        ).showPickerDialog(context);
+        ).showPickerDialog(context,
+            title: const Text(
+              'Selecciona un color',
+              textAlign: TextAlign.center,
+            ),
+            titlePadding: const EdgeInsets.all(16.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            constraints: const BoxConstraints(minWidth: 300));
         widget.onColorChanged.call(selected ? selectedColor : null);
         if (!selected) {
           setState(() {

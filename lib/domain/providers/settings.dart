@@ -37,4 +37,24 @@ class SettingsNotifier extends Notifier<AppSettings> {
     state = state.copyWith(themeSeed: Optional.value(newColor));
     ref.read(storageProvider).save(_fileName, state.toMap());
   }
+
+  void toggleSound(bool newValue) {
+    state = state.copyWith(counterSoundEnabled: newValue);
+    ref.read(storageProvider).save(_fileName, state.toMap());
+  }
+
+  void changeBeepsNumber(int newValue) {
+    state = state.copyWith(counterBeeps: newValue);
+    ref.read(storageProvider).save(_fileName, state.toMap());
+  }
+
+  void changeFrameRate(double newFrameRate) {
+    state = state.copyWith(frameRate: newFrameRate);
+    ref.read(storageProvider).save(_fileName, state.toMap());
+  }
+
+  void reset() {
+    state = const AppSettings();
+    ref.read(storageProvider).save(_fileName, state.toMap());
+  }
 }

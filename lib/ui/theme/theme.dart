@@ -132,9 +132,9 @@ class AppTheme {
         ),
         scaffoldBackgroundColor: colorScheme.surface,
         canvasColor: colorScheme.surface,
-        // bottomAppBarTheme: BottomAppBarTheme(
-        //   color: colorScheme.surfaceContainerHighest,
-        // ),
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: colorScheme.inversePrimary,
+        ),
       );
 
   ThemeData customThemeFromSeed(Brightness brightness, Color color) {

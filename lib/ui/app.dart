@@ -42,7 +42,8 @@ class KromoApp extends ConsumerWidget {
     const theme = AppTheme();
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Kromo RNG',
       themeMode: settings.themeMode,
       theme: settings.themeType == ThemeType.custom && settings.themeSeed != null
           ? theme.customThemeFromSeed(Brightness.light, settings.themeSeed!)
