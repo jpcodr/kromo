@@ -5,37 +5,21 @@ import 'package:kromo/data/models/frame_rate.dart';
 import 'package:kromo/data/models/theme.dart';
 import 'package:kromo/data/utils.dart';
 import 'package:kromo/domain/providers/settings.dart';
+import 'package:kromo/ui/screens/settings/widgets/restore_settings_dialog.dart';
 import 'package:kromo/ui/widgets/color_field.dart';
+import 'package:kromo/ui/widgets/controlled_text_field.dart';
 import 'package:kromo/ui/widgets/keyboard_dismiss.dart';
 
-class SettingsScreen extends ConsumerStatefulWidget {
-  const SettingsScreen({super.key});
+class SettingsScreen extends ConsumerWidget {
+  SettingsScreen({super.key});
+
+  final _debouncer = Debouncer(milliseconds: 1000);
 
   @override
-  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  late TextEditingController _beepsController;
-  late TextEditingController _rateController;
-  late FrameRate currentRate;
-
-  @override
-  void initState() {
-    super.initState();
-    final settings = ref.read(settingsProvider);
-    _beepsController = TextEditingController(text: '${settings.counterBeeps}');
-    currentRate = getFrameRateByValue(settings.frameRate);
-    _rateController = TextEditingController(
-        text: currentRate == FrameRate.custom
-            ? '${settings.frameRate}'
-            : '${FrameRate.custom.rate}');
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final tt = Theme.of(context).textTheme;
     final settings = ref.watch(settingsProvider);
+    final currentRate = getFrameRateByValue(settings.frameRate);
 
     return KeyboardDismiss(
       child: Scaffold(
@@ -104,13 +88,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 16.0),
             Text('Número de alertas', style: tt.labelMedium),
             const SizedBox(height: 8.0),
-            TextField(
-              controller: _beepsController,
+            ControlledTextField(
               keyboardType: TextInputType.number,
               onChanged: (value) {
-                final count = int.tryParse(value) ?? 6;
+                final count = int.tryParse(value) ?? 0;
                 ref.read(settingsProvider.notifier).changeBeepsNumber(count);
               },
+              value: settings.counterBeeps.toString(),
             ),
             const SizedBox(height: 16.0),
             Text('Cuadros por segundo', style: tt.labelMedium),
@@ -119,9 +103,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               value: currentRate,
               onChanged: (newFrameRate) {
                 if (newFrameRate != null) {
-                  setState(() {
-                    currentRate = newFrameRate;
-                  });
                   ref
                       .read(settingsProvider.notifier)
                       .changeFrameRate(newFrameRate.rate);
@@ -136,13 +117,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   .toList(),
             ),
             const SizedBox(height: 16.0),
-            TextField(
+            ControlledTextField(
               enabled: currentRate == FrameRate.custom,
-              controller: _rateController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               onChanged: (value) {
-                final newRate = double.tryParse(value) ?? FrameRate.custom.rate;
-                ref.read(settingsProvider.notifier).changeFrameRate(newRate);
+                _debouncer.run(() {
+                  final newRate =
+                      double.tryParse(value) ?? FrameRate.custom.rate;
+                  ref.read(settingsProvider.notifier).changeFrameRate(newRate);
+                });
               },
+              value: currentRate == FrameRate.custom
+                  ? settings.frameRate.toString()
+                  : currentRate.rate.toString(),
             ),
             const SizedBox(height: 32.0),
             FilledButton.tonal(

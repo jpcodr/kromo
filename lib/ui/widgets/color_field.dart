@@ -38,28 +38,34 @@ class _ColorFieldState extends ConsumerState<ColorField> {
   }
 
   @override
+  void didUpdateWidget(covariant ColorField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.color != widget.color) {
+      setState(() {
+        selectedColor = widget.color ?? Colors.white;
+        _controller.text =
+            '${ColorTools.nameThatColor(selectedColor)} (#${selectedColor.hex})';
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
       enabled: widget.enabled,
       canRequestFocus: false,
       decoration: InputDecoration(
         hintText: 'Selecciona un color',
-        suffix: SizedBox(
-          height: 20.0,
-          width: 20.0,
-          child: Stack(
-            children: [
-              ColorIndicator(
+        suffix: widget.enabled
+            ? ColorIndicator(
+                height: 20.0,
+                width: 20.0,
                 color: selectedColor,
                 borderRadius: 0,
-              ),
-              if (!widget.enabled)
-                Container(
-                  color: Colors.black.withOpacity(0.7),
-                )
-            ],
-          ),
-        ),
+                hasBorder: true,
+              )
+            : null,
       ),
       controller: _controller,
       onTap: () async {

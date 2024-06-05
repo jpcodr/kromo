@@ -30,7 +30,7 @@ class MyHomePage extends StatelessWidget {
               return IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const SettingsScreen(),
+                    builder: (_) => SettingsScreen(),
                   ));
                 },
                 icon: const Icon(Icons.settings),
