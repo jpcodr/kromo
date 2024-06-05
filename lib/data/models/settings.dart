@@ -9,7 +9,7 @@ class AppSettings extends Equatable {
     this.counterBeeps = 6,
     this.counterSoundEnabled = true,
     this.frameRate = 60.0,
-    this.themeMode = ThemeMode.light,
+    this.themeMode = ThemeMode.system,
     this.themeSeed,
     this.themeType = ThemeType.mono,
   });
