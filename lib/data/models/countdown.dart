@@ -18,7 +18,7 @@ class Countdown extends Equatable {
     String? id,
     this.name,
     this.targetFrame,
-    required this.time,
+    required this.duration,
     this.type = CountdownType.simple,
   }) : id = id ?? const Uuid().v4();
 
@@ -26,8 +26,18 @@ class Countdown extends Equatable {
   final String id;
   final String? name;
   final int? targetFrame;
-  final int time;
+  final Duration duration;
   final CountdownType type;
+
+  Countdown.fromTime(
+    int time, {
+    this.currentFrame,
+    String? id,
+    this.name,
+    this.targetFrame,
+    this.type = CountdownType.simple,
+  })  : id = id ?? const Uuid().v4(),
+        duration = Duration(milliseconds: time);
 
   @override
   List<Object?> get props => [
@@ -35,7 +45,7 @@ class Countdown extends Equatable {
         name,
         id,
         targetFrame,
-        time,
+        duration,
         type,
       ];
 
@@ -47,7 +57,7 @@ class Countdown extends Equatable {
         targetFrame: json['targetFrame'],
         id: json['id'],
         name: json['name'],
-        time: json['time'] as int,
+        duration: Duration(milliseconds: json['time'] as int),
         type: CountdownType.values.byName(json['type']),
       );
 
@@ -57,7 +67,7 @@ class Countdown extends Equatable {
       'id': id,
       'name': name,
       'targetFrame': targetFrame,
-      'time': time,
+      'time': duration.inMilliseconds,
       'type': type.name,
     };
   }
