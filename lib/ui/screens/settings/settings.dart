@@ -143,7 +143,26 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 final newRate = double.tryParse(value) ?? FrameRate.custom.rate;
                 ref.read(settingsProvider.notifier).changeFrameRate(newRate);
               },
-            )
+            ),
+            const SizedBox(height: 32.0),
+            FilledButton.tonal(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                foregroundColor: Theme.of(context).colorScheme.onError,
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return RestoreSettingsDialog(
+                      onPressed: () =>
+                          ref.read(settingsProvider.notifier).reset(),
+                    );
+                  },
+                );
+              },
+              child: const Text('Reestablecer'),
+            ),
           ],
         ),
       ),
