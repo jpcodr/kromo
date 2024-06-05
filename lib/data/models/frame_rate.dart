@@ -5,7 +5,10 @@ enum FrameRate {
   ds(label: 'DS', rate: 59.6555),
   custom(label: 'Personalizado', rate: 0.0);
 
-  const FrameRate({required this.label, required this.rate,});
+  const FrameRate({
+    required this.label,
+    required this.rate,
+  });
 
   final String label;
   final double rate;
