@@ -16,10 +16,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: KromoCountdown(),
-      ),
+      body: const KromoCountdown(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
