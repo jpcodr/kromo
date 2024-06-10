@@ -51,7 +51,7 @@ class KromoApp extends ConsumerWidget {
       darkTheme: settings.themeType == ThemeType.custom && settings.themeSeed != null
           ? theme.customThemeFromSeed(Brightness.dark, settings.themeSeed!)
           : theme.dark(),
-      home: const MyHomePage(title: 'Kromo RNG'),
+      home: const HomePage(title: 'Kromo RNG'),
     );
   }
 }

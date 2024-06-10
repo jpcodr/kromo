@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kromo/ui/screens/settings/settings.dart';
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
+import 'package:kromo/ui/screens/settings/settings.dart';
+import 'package:kromo/ui/widgets/kromo_countdown.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key, required this.title});
 
   final String title;
 
@@ -14,14 +16,15 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
-      body: const Center(
-        child: Text(
-          'An alternative Pokémon RNG Timer',
-        ),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: KromoCountdown(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-          onPressed: () {}, child: const Icon(Icons.timer_outlined)),
+        onPressed: () {},
+        child: const Icon(Icons.timer_outlined),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
