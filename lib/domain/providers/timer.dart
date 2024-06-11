@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kromo/data/models/timer.dart';
+import 'package:kromo/domain/providers/audio.dart';
 import 'package:kromo/domain/providers/countdowns.dart';
 
 final timerProvider =
@@ -19,6 +20,7 @@ class TimerNotifier extends Notifier<TimerModel> {
   int _currentIdx = 0;
 
   void start() {
+    ref.read(audioProvider);
     state = state.copyWith(state: TimerState.running);
   }
 

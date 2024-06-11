@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -8,6 +8,7 @@ import 'package:kromo/data/data.dart';
 import 'package:kromo/data/models/remaining_time.dart';
 import 'package:kromo/data/models/settings.dart';
 import 'package:kromo/data/models/timer.dart';
+import 'package:kromo/domain/providers/audio.dart';
 import 'package:kromo/domain/providers/settings.dart';
 import 'package:kromo/domain/providers/timer.dart';
 import 'package:kromo/ui/widgets/timer_text.dart';
@@ -63,7 +64,7 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
       if (_currentAlert >= 0 &&
           (currentTime.inMilliseconds <= (alertLapse * _currentAlert) ||
               currentTime.inMilliseconds <= 0)) {
-        log('NEW ALERT AT: ${currentTime.inMilliseconds}');
+        // log('NEW ALERT AT: ${currentTime.inMilliseconds}');
         _createAlert();
       }
 
@@ -89,10 +90,10 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   }
 
   void _settingsListener(AppSettings? prev, AppSettings next) {
-    log('ON SETTINGS CHANGED');
+    // log('ON SETTINGS CHANGED');
     if (prev?.counterSoundEnabled != next.counterSoundEnabled ||
         prev?.counterBeeps != next.counterBeeps) {
-      log('CHANGE SETTINGS');
+      // log('CHANGE SETTINGS');
       setState(() {
         _currentAlert = next.counterBeeps - 1;
         _playSound = next.counterSoundEnabled;
@@ -104,10 +105,17 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
     _currentAlert--;
     _alerting = true;
 
+    if (_playSound) {
+      ref.read(audioProvider.notifier).play();
+    }
+
     Future.delayed(const Duration(milliseconds: 100), () {
-      log('CLEAR ALERT');
+      // log('CLEAR ALERT');
       setState(() {
         _alerting = false;
+        if (_playSound) {
+          ref.read(audioProvider.notifier).stop();
+        }
       });
     });
   }
