@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:kromo/ui/screens/countdown/countdown_list.dart';
 import 'package:kromo/ui/screens/settings/settings.dart';
 import 'package:kromo/ui/widgets/kromo_countdown.dart';
 
@@ -19,7 +20,14 @@ class HomePage extends StatelessWidget {
       body: const KromoCountdown(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              fullscreenDialog: true,
+              builder: (_) => const CountdownList(),
+            ),
+          );
+        },
         child: const Icon(Icons.timer_outlined),
       ),
       bottomNavigationBar: BottomAppBar(

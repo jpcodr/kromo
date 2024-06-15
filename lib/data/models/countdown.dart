@@ -29,7 +29,7 @@ class Countdown extends Equatable {
   final Duration duration;
   final CountdownType type;
 
-  Countdown.fromTime(
+  Countdown.fromMilliseconds(
     int time, {
     this.currentFrame,
     String? id,
