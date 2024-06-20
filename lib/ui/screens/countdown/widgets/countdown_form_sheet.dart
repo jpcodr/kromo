@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kromo/data/models/countdown.dart';
 import 'package:kromo/ui/screens/countdown/widgets/countdown_form.dart';
+import 'package:kromo/ui/widgets/keyboard_dismiss.dart';
 
 class CountdownFormSheet extends StatelessWidget {
   const CountdownFormSheet({
@@ -13,32 +14,43 @@ class CountdownFormSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
+    return DraggableScrollableSheet(
+      expand: false,
+      snap: true,
+      initialChildSize: 0.5,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      builder: (_, scrollController) => Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    '${countdown == null ? 'Añadir' : 'Actualizar'} cuenta',
-                    style: Theme.of(context).textTheme.headlineSmall,
+        child: KeyboardDismiss(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${countdown == null ? 'Añadir' : 'Actualizar'} cuenta',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                   ),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: CloseButton(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: CountdownForm(countdown: countdown),
                 ),
-                const Align(
-                  alignment: Alignment.centerRight,
-                  child: CloseButton(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            CountdownForm(countdown: countdown),
-            const SizedBox(height: 32.0),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

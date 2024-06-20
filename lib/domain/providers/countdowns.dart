@@ -43,4 +43,11 @@ class CountdownsNotifier extends Notifier<List<Countdown>> {
       'countdowns': state.map((el) => el.toMap()).toList(),
     });
   }
+
+  void delete(String id) {
+    state = [
+      for (var c in state)
+        if (c.id != id) c
+    ];
+  }
 }

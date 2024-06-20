@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,7 +7,7 @@ import 'package:kromo/data/models/countdown.dart';
 import 'package:kromo/data/models/remaining_time.dart';
 import 'package:kromo/domain/providers/countdowns.dart';
 import 'package:kromo/domain/providers/settings.dart';
-import 'package:kromo/ui/widgets/keyboard_dismiss.dart';
+import 'package:kromo/ui/screens/countdown/widgets/delete_countdown_dialog.dart';
 
 class CountdownForm extends ConsumerStatefulWidget {
   const CountdownForm({
@@ -116,96 +118,128 @@ class _CountdownFormState extends ConsumerState<CountdownForm> {
     ));
   }
 
+  void _delete() {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return DeleteCountdownDialog(
+          onPressed: () {
+            try {
+              ref.read(countdownsProvider.notifier).delete(countdown!.id);
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Eliminado con éxito'),
+                behavior: SnackBarBehavior.floating,
+              ));
+            } catch (e) {
+              log('Falla', error: e);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                content: const Text('Error al eliminar'),
+                behavior: SnackBarBehavior.floating,
+              ));
+            }
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return KeyboardDismiss(
-      child: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SegmentedButton<CountdownType>(
-                segments: [
-                  ButtonSegment<CountdownType>(
-                    value: CountdownType.simple,
-                    label: const Text('Simple'),
-                    enabled: !editing,
-                  ),
-                  ButtonSegment<CountdownType>(
-                    value: CountdownType.extended,
-                    label: const Text('Avanzado'),
-                    enabled: !editing,
-                  ),
-                ],
-                selected: <CountdownType>{_selectedType},
-                onSelectionChanged: (Set<CountdownType> newSelection) =>
-                    setState(() {
-                  _selectedType = newSelection.first;
-                }),
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SegmentedButton<CountdownType>(
+            segments: [
+              ButtonSegment<CountdownType>(
+                value: CountdownType.simple,
+                label: const Text('Simple'),
+                enabled: !editing,
               ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _nameCtrl,
-                decoration: const InputDecoration(
-                  hintText: 'Nombre',
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (_selectedType == CountdownType.extended) ...[
-                TextFormField(
-                  controller: _tFrameCtrl,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Frame objetivo',
-                  ),
-                  onChanged: (value) => _calculateTime(),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  readOnly: !editing,
-                  enabled: editing,
-                  controller: _cFrameCtrl,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Frame alcanzado',
-                  ),
-                  onChanged: (value) => _calculateTime(),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _gapCtrl,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    hintText: 'Defase',
-                    suffixIcon: IconButton(
-                      onPressed: _clearGap,
-                      icon: const Icon(Icons.clear),
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 16),
-              TextFormField(
-                readOnly: _selectedType == CountdownType.extended,
-                enabled: _selectedType != CountdownType.extended,
-                controller: _timeCtrl,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(
-                  hintText: 'Segundos',
-                  suffixText: 'seg',
-                ),
-                onChanged: (_) => _setTime(),
-              ),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: _save,
-                child: const Text('Guardar'),
+              ButtonSegment<CountdownType>(
+                value: CountdownType.extended,
+                label: const Text('Avanzado'),
+                enabled: !editing,
               ),
             ],
+            selected: <CountdownType>{_selectedType},
+            onSelectionChanged: (Set<CountdownType> newSelection) =>
+                setState(() {
+              _selectedType = newSelection.first;
+            }),
           ),
-        ),
+          const SizedBox(height: 16.0),
+          TextFormField(
+            controller: _nameCtrl,
+            decoration: const InputDecoration(
+              hintText: 'Nombre',
+            ),
+          ),
+          const SizedBox(height: 16),
+          if (_selectedType == CountdownType.extended) ...[
+            TextFormField(
+              controller: _tFrameCtrl,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Frame objetivo',
+              ),
+              onChanged: (value) => _calculateTime(),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              readOnly: !editing,
+              enabled: editing,
+              controller: _cFrameCtrl,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Frame alcanzado',
+              ),
+              onChanged: (value) => _calculateTime(),
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _gapCtrl,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: 'Desfase',
+                suffixIcon: IconButton(
+                  onPressed: _clearGap,
+                  icon: const Icon(Icons.clear),
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(height: 16),
+          TextFormField(
+            readOnly: _selectedType == CountdownType.extended,
+            enabled: _selectedType != CountdownType.extended,
+            controller: _timeCtrl,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(
+              hintText: 'Segundos',
+              suffixText: 'seg',
+            ),
+            onChanged: (_) => _setTime(),
+          ),
+          const SizedBox(height: 16),
+          FilledButton(
+            onPressed: _save,
+            child: const Text('Guardar'),
+          ),
+          if (editing) ...[
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: _delete,
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error,
+              ),
+              child: const Text('Eliminar'),
+            ),
+          ]
+        ],
       ),
     );
   }
