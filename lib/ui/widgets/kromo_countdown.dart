@@ -1,4 +1,4 @@
-// import 'dart:developer';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -30,6 +30,7 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   late final Ticker _ticker;
   late final ProviderSubscription _timerSubscription;
   late final ProviderSubscription _settingsSubscription;
+  // late final ProviderSubscription _countdownsSubscription;
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
         ref.listenManual<TimerModel>(timerProvider, _timerListener);
     _settingsSubscription =
         ref.listenManual<AppSettings>(settingsProvider, _settingsListener);
+    // _countdownsSubscription = ref.listenManual(countdown, listener)
   }
 
   @override
@@ -64,7 +66,7 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
       if (_currentAlert >= 0 &&
           (currentTime.inMilliseconds <= (alertLapse * _currentAlert) ||
               currentTime.inMilliseconds <= 0)) {
-        // log('NEW ALERT AT: ${currentTime.inMilliseconds}');
+        log('NEW ALERT AT: ${currentTime.inMilliseconds}');
         _createAlert();
       }
 
@@ -75,16 +77,17 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   }
 
   void _timerListener(TimerModel? prev, TimerModel next) {
+    log('TIMER CHANGED');
     _ticker.stop();
 
     setState(() {
       _initialTime = ref.read(timerProvider).duration;
+      _currentAlert = ref.read(settingsProvider).counterBeeps - 1;
 
       if (next.state == TimerState.running) {
         _ticker.start();
       } else {
         _remaining = RemainingTime(duration: _initialTime);
-        _currentAlert = ref.read(settingsProvider).counterBeeps - 1;
       }
     });
   }

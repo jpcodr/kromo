@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kromo/data/models/optional.dart';
 import 'package:kromo/data/models/settings.dart';
 import 'package:kromo/data/models/theme.dart';
+import 'package:kromo/domain/providers/countdowns.dart';
 import 'package:kromo/domain/providers/storage.dart';
+import 'package:kromo/domain/providers/timer.dart';
 
 final settingsProvider = NotifierProvider<SettingsNotifier, AppSettings>(
   SettingsNotifier.new,
@@ -55,6 +57,9 @@ class SettingsNotifier extends Notifier<AppSettings> {
 
   void reset() {
     state = const AppSettings();
+    ref.invalidate(countdownsProvider);
+    ref.invalidate(timerProvider);
+    ref.read(storageProvider).clear();
     ref.read(storageProvider).save(_fileName, state.toMap());
   }
 }

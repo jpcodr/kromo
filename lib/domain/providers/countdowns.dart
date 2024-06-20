@@ -19,11 +19,28 @@ class CountdownsNotifier extends Notifier<List<Countdown>> {
         : []);
 
     if (countdowns.isEmpty) {
-      ref.read(storageProvider).save(
-          _fileName, {'countdowns': [defaultCountdown.toMap()]});
+      ref.read(storageProvider).save(_fileName, {
+        'countdowns': [defaultCountdown.toMap()]
+      });
+
       return [defaultCountdown];
     }
 
     return countdowns;
+  }
+
+  void save(Countdown countdown, [String? id]) {
+    if (id != null) {
+      state = [
+        for (var c in state)
+          if (c.id == id) countdown else c
+      ];
+    } else {
+      state = [...state, countdown];
+    }
+
+    ref.read(storageProvider).save(_fileName, {
+      'countdowns': state.map((el) => el.toMap()).toList(),
+    });
   }
 }

@@ -10,7 +10,7 @@ final timerProvider =
 class TimerNotifier extends Notifier<TimerModel> {
   @override
   TimerModel build() {
-    final countdowns = ref.read(countdownsProvider);
+    final countdowns = ref.watch(countdownsProvider);
 
     return TimerModel(
       duration: countdowns[_currentIdx].duration,

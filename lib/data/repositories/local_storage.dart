@@ -25,5 +25,10 @@ class LocalStorageImpl extends LocalStorage {
 
     return Map<String, dynamic>.from(jsonDecode(data ?? '{}'));
   }
+  
+  @override
+  Future<void> clear() async {
+    await prefs.clear();
+  }
 
 }

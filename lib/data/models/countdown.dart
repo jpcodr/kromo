@@ -15,6 +15,7 @@ enum CountdownType {
 class Countdown extends Equatable {
   Countdown({
     this.currentFrame,
+    this.gap = 0,
     String? id,
     this.name,
     this.targetFrame,
@@ -23,6 +24,7 @@ class Countdown extends Equatable {
   }) : id = id ?? const Uuid().v4();
 
   final int? currentFrame;
+  final int gap;
   final String id;
   final String? name;
   final int? targetFrame;
@@ -32,6 +34,7 @@ class Countdown extends Equatable {
   Countdown.fromMilliseconds(
     int time, {
     this.currentFrame,
+    this.gap = 0,
     String? id,
     this.name,
     this.targetFrame,
@@ -42,6 +45,7 @@ class Countdown extends Equatable {
   @override
   List<Object?> get props => [
         currentFrame,
+        gap,
         name,
         id,
         targetFrame,
@@ -54,6 +58,7 @@ class Countdown extends Equatable {
 
   factory Countdown.fromMap(Map<String, dynamic> json) => Countdown(
         currentFrame: json['currentFrame'],
+        gap: json['gap'] ?? 0,
         targetFrame: json['targetFrame'],
         id: json['id'],
         name: json['name'],
@@ -64,6 +69,7 @@ class Countdown extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'currentFrame': currentFrame,
+      'gap': gap,
       'id': id,
       'name': name,
       'targetFrame': targetFrame,

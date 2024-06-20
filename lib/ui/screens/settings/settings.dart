@@ -8,6 +8,7 @@ import 'package:kromo/domain/providers/settings.dart';
 import 'package:kromo/ui/screens/settings/widgets/restore_settings_dialog.dart';
 import 'package:kromo/ui/widgets/color_field.dart';
 import 'package:kromo/ui/widgets/controlled_text_field.dart';
+import 'package:kromo/ui/widgets/decorated_dropdown.dart';
 import 'package:kromo/ui/widgets/keyboard_dismiss.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -31,20 +32,23 @@ class SettingsScreen extends ConsumerWidget {
             Text('Configuración de tema', style: tt.headlineSmall),
             const SizedBox(height: 12.0),
             Text('Tema', style: tt.labelMedium),
-            DropdownButton<ThemeType>(
-              isExpanded: true,
-              value: settings.themeType,
-              onChanged: (newType) {
-                if (newType != null) {
-                  ref.read(settingsProvider.notifier).changeThemeType(newType);
-                }
-              },
-              items: ThemeType.values
-                  .map((el) => DropdownMenuItem(
-                        value: el,
-                        child: Text(el.label),
-                      ))
-                  .toList(),
+            const SizedBox(height: 8.0),
+            DecoratedDropdown(
+              child: DropdownButton<ThemeType>(
+                isExpanded: true,
+                value: settings.themeType,
+                onChanged: (newType) {
+                  if (newType != null) {
+                    ref.read(settingsProvider.notifier).changeThemeType(newType);
+                  }
+                },
+                items: ThemeType.values
+                    .map((el) => DropdownMenuItem(
+                          value: el,
+                          child: Text(el.label),
+                        ))
+                    .toList(),
+              ),
             ),
             const SizedBox(height: 16.0),
             Text('Color', style: tt.labelMedium),
@@ -60,20 +64,23 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16.0),
             Text('Modo', style: tt.labelMedium),
-            DropdownButton<ThemeMode>(
-              isExpanded: true,
-              value: settings.themeMode,
-              onChanged: (newMode) {
-                if (newMode != null) {
-                  ref.read(settingsProvider.notifier).changeThemeMode(newMode);
-                }
-              },
-              items: ThemeMode.values
-                  .map((el) => DropdownMenuItem(
-                        value: el,
-                        child: Text(el.label),
-                      ))
-                  .toList(),
+            const SizedBox(height: 8.0),
+            DecoratedDropdown(
+              child: DropdownButton<ThemeMode>(
+                isExpanded: true,
+                value: settings.themeMode,
+                onChanged: (newMode) {
+                  if (newMode != null) {
+                    ref.read(settingsProvider.notifier).changeThemeMode(newMode);
+                  }
+                },
+                items: ThemeMode.values
+                    .map((el) => DropdownMenuItem(
+                          value: el,
+                          child: Text(el.label),
+                        ))
+                    .toList(),
+              ),
             ),
             const SizedBox(height: 32.0),
             Text('Configuración de contador', style: tt.headlineSmall),
@@ -98,23 +105,26 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16.0),
             Text('Cuadros por segundo', style: tt.labelMedium),
-            DropdownButton<FrameRate>(
-              isExpanded: true,
-              value: currentRate,
-              onChanged: (newFrameRate) {
-                if (newFrameRate != null) {
-                  ref
-                      .read(settingsProvider.notifier)
-                      .changeFrameRate(newFrameRate.rate);
-                }
-              },
-              items: FrameRate.values
-                  .map((el) => DropdownMenuItem(
-                        value: el,
-                        child: Text(
-                            '${el.label}${el != FrameRate.custom && el != FrameRate.initial ? ' (${el.rate} fps)' : ''}'),
-                      ))
-                  .toList(),
+            const SizedBox(height: 8.0),
+            DecoratedDropdown(
+              child: DropdownButton<FrameRate>(
+                isExpanded: true,
+                value: currentRate,
+                onChanged: (newFrameRate) {
+                  if (newFrameRate != null) {
+                    ref
+                        .read(settingsProvider.notifier)
+                        .changeFrameRate(newFrameRate.rate);
+                  }
+                },
+                items: FrameRate.values
+                    .map((el) => DropdownMenuItem(
+                          value: el,
+                          child: Text(
+                              '${el.label}${el != FrameRate.custom && el != FrameRate.initial ? ' (${el.rate} fps)' : ''}'),
+                        ))
+                    .toList(),
+              ),
             ),
             const SizedBox(height: 16.0),
             ControlledTextField(

@@ -135,6 +135,11 @@ class AppTheme {
         bottomAppBarTheme: BottomAppBarTheme(
           color: colorScheme.inversePrimary,
         ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+        ),
       );
 
   ThemeData customThemeFromSeed(Brightness brightness, Color color) {

@@ -20,7 +20,7 @@ class CountdownItem extends StatelessWidget {
 
     return ListTile(
       isThreeLine: countdown.type == CountdownType.extended,
-      tileColor: Theme.of(context).colorScheme.surfaceContainer,
+      tileColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       onTap: () => onPressed?.call(countdown),
       title: Padding(
@@ -44,7 +44,7 @@ class CountdownItem extends StatelessWidget {
       subtitle: countdown.type == CountdownType.simple
           ? null
           : Text(
-              'Frame objetivo: ${countdown.targetFrame ?? '-'}\nFrame alcanzado: ${countdown.currentFrame ?? '-'}'),
+              'Frame objetivo: ${countdown.targetFrame ?? '-'}\nDesfase: ${countdown.gap != 0 ? countdown.gap : '-'}'),
       trailing: Text(
         '${remaining.seconds}.${remaining.hundreds}',
         style: textTheme.titleLarge,
