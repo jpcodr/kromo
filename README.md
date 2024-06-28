@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/img/logo.jpeg" width="128"/>
+<img src="assets/img/logo.png" width="128"/>
 
 # Kromo
 An alternative multiplatform Pokémon RNG Timer
