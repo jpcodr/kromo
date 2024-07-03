@@ -43,8 +43,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      name: Copy README.md
-      run: cp README.md build/web/
+      - name: Copy README.md
+        run: cp README.md build/web/
 
   deploy:
     name: Deploy Web Build
