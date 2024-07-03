@@ -2,14 +2,21 @@
 <img src="assets/img/logo.png" width="128"/>
 
 # Kromo
-An alternative multiplatform Pokémon RNG Timer
+An alternative multiplatform Pokémon RNG Timer. Inspired by [EonTimer](https://github.com/DasAmpharos/EonTimer)
 
 </div>
 
 <br />
 
 ## Releases
-- Web: The latest release can be found under the [here](https://jpcodr.github.io/kromo) 
+- Web: The latest release can be found under [here](https://jpcodr.github.io/kromo) 
+
+## TO DO
+
+- [ ] Multilanguage (actual version is only in spanish)
+- [ ] Safari support (sound is not playing)
+- [ ] Release in App Store
+- [ ] Release in Play Store
 
 ## License
 Kromo is released under the [MIT License](LICENSE.md).
