@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum TimerState { initial, running }
+enum TimerState { idle, running }
 
 class TimerModel extends Equatable {
   final Duration duration;
@@ -9,7 +9,7 @@ class TimerModel extends Equatable {
 
   const TimerModel({
     this.duration = Duration.zero,
-    this.state = TimerState.initial,
+    this.state = TimerState.idle,
     this.currentCountdownIdx = 0,
   });
 
