@@ -31,6 +31,7 @@ class TimerNotifier extends Notifier<TimerModel> {
       _currentIdx++;
       state = state.copyWith(
         duration: countdowns[_currentIdx].duration,
+        currentCountdownIdx: _currentIdx,
       );
     } else {
       stop();
@@ -39,7 +40,10 @@ class TimerNotifier extends Notifier<TimerModel> {
 
   void stop() {
     _currentIdx = 0;
-    final duration = ref.read(countdownsProvider)[_currentIdx].duration;
-    state = state.copyWith(state: TimerState.initial, duration: duration);
+    state = state.copyWith(
+      state: TimerState.idle,
+      duration: ref.read(countdownsProvider)[_currentIdx].duration,
+      currentCountdownIdx: _currentIdx,
+    );
   }
 }
