@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kromo/data/models/theme.dart';
 
+import 'package:kromo/data/models/theme.dart';
 import 'package:kromo/domain/providers/app.dart';
 import 'package:kromo/domain/providers/settings.dart';
 import 'package:kromo/ui/app_error.dart';

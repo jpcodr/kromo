@@ -30,14 +30,14 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   late final Ticker _ticker;
   late final ProviderSubscription _timerSubscription;
   late final ProviderSubscription _settingsSubscription;
-  // late final ProviderSubscription _countdownsSubscription;
 
   @override
   void initState() {
     super.initState();
     final settings = ref.read(settingsProvider);
+    final timerState = ref.read(timerProvider);
 
-    _initialTime = ref.read(timerProvider).duration;
+    _initialTime = timerState.duration;
     _playSound = settings.counterSoundEnabled;
     _currentAlert = settings.counterBeeps - 1;
     _remaining = RemainingTime(duration: _initialTime);
@@ -46,7 +46,6 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
         ref.listenManual<TimerModel>(timerProvider, _timerListener);
     _settingsSubscription =
         ref.listenManual<AppSettings>(settingsProvider, _settingsListener);
-    // _countdownsSubscription = ref.listenManual(countdown, listener)
   }
 
   @override
@@ -66,7 +65,7 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
       if (_currentAlert >= 0 &&
           (currentTime.inMilliseconds <= (alertLapse * _currentAlert) ||
               currentTime.inMilliseconds <= 0)) {
-        log('NEW ALERT AT: ${currentTime.inMilliseconds}');
+        // log('NEW ALERT AT: ${currentTime.inMilliseconds}');
         _createAlert();
       }
 
@@ -77,11 +76,11 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   }
 
   void _timerListener(TimerModel? prev, TimerModel next) {
-    log('TIMER CHANGED');
+    // log('TIMER CHANGED');
     _ticker.stop();
 
     setState(() {
-      _initialTime = ref.read(timerProvider).duration;
+      _initialTime = next.duration;
       _currentAlert = ref.read(settingsProvider).counterBeeps - 1;
 
       if (next.state == TimerState.running) {
@@ -93,10 +92,8 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   }
 
   void _settingsListener(AppSettings? prev, AppSettings next) {
-    // log('ON SETTINGS CHANGED');
     if (prev?.counterSoundEnabled != next.counterSoundEnabled ||
         prev?.counterBeeps != next.counterBeeps) {
-      // log('CHANGE SETTINGS');
       setState(() {
         _currentAlert = next.counterBeeps - 1;
         _playSound = next.counterSoundEnabled;
@@ -105,20 +102,19 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   }
 
   void _createAlert() {
-    _currentAlert--;
     _alerting = true;
 
     if (_playSound) {
       ref.read(audioProvider.notifier).play();
     }
 
+    _currentAlert--;
+
     Future.delayed(const Duration(milliseconds: 100), () {
-      // log('CLEAR ALERT');
+      log('CLEAR ALERT');
       setState(() {
         _alerting = false;
-        if (_playSound) {
-          ref.read(audioProvider.notifier).stop();
-        }
+        // ref.read(audioProvider.notifier).stop();
       });
     });
   }
@@ -127,6 +123,7 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isRunning = ref.watch(timerProvider).state == TimerState.running;
+    final audio = ref.watch(audioProvider);
 
     return Stack(
       fit: StackFit.expand,
@@ -135,33 +132,38 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
           Container(
             color: theme.colorScheme.primaryContainer.withOpacity(0.75),
           ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TimerText(
-                text:
-                    '${_remaining.minutes}:${_remaining.seconds}.${_remaining.hundreds}',
-                width: 40.0,
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-              const SizedBox(height: 12.0),
-              FilledButton(
-                onPressed: () {
-                  if (isRunning) {
-                    ref.read(timerProvider.notifier).stop();
-                  } else {
-                    ref.read(timerProvider.notifier).start();
-                  }
-                },
-                child: Text(
-                  isRunning ? 'Detener' : 'Empezar',
+        audio.maybeWhen(
+          data: (_) => Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TimerText(
+                  text:
+                      '${_remaining.minutes}:${_remaining.seconds}.${_remaining.hundreds}',
+                  width: 40.0,
+                  style: Theme.of(context).textTheme.displayLarge,
                 ),
-              ),
-            ],
+                const SizedBox(height: 12.0),
+                FilledButton(
+                  onPressed: () {
+                    if (isRunning) {
+                      ref.read(timerProvider.notifier).stop();
+                    } else {
+                      ref.read(timerProvider.notifier).start();
+                    }
+                  },
+                  child: Text(
+                    isRunning ? 'Detener' : 'Empezar',
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          orElse: () => const Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+        )
       ],
     );
   }

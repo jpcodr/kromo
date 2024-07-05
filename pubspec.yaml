@@ -43,7 +43,9 @@ dependencies:
   shared_preferences: ^2.2.3
   flex_color_picker: ^3.5.0
   uuid: ^4.4.0
-  audioplayers: ^6.0.0
+  # audioplayers: ^6.0.0
+  # just_audio: ^0.9.38
+  soundpool: ^2.4.1
 
 dev_dependencies:
   flutter_test:
