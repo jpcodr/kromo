@@ -45,7 +45,7 @@ class _CountdownFormState extends ConsumerState<CountdownForm> {
     _timeCtrl = TextEditingController(
         text: _remaining.duration.inMicroseconds == 0
             ? null
-            : '${_remaining.seconds}.${_remaining.hundreds}');
+            : _remaining.getTimeString());
     _tFrameCtrl = TextEditingController(
         text: targetFrame > 0 ? targetFrame.toString() : null);
     _cFrameCtrl = TextEditingController();
@@ -83,7 +83,7 @@ class _CountdownFormState extends ConsumerState<CountdownForm> {
     }
 
     _remaining = RemainingTime(duration: Duration(milliseconds: time));
-    _timeCtrl.text = '${_remaining.seconds}.${_remaining.hundreds}';
+    _timeCtrl.text = _remaining.getTimeString();
 
     setState(() {});
   }
@@ -218,9 +218,11 @@ class _CountdownFormState extends ConsumerState<CountdownForm> {
             enabled: _selectedType != CountdownType.extended,
             controller: _timeCtrl,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(
-              hintText: 'Segundos',
-              suffixText: 'seg',
+            decoration: InputDecoration(
+              hintText: _selectedType == CountdownType.extended
+                  ? 'Tiempo'
+                  : 'Segundos',
+              suffixIcon: const Icon(Icons.timer_outlined),
             ),
             onChanged: (_) => _setTime(),
           ),

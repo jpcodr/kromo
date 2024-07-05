@@ -46,7 +46,7 @@ class CountdownItem extends StatelessWidget {
           : Text(
               'Frame objetivo: ${countdown.targetFrame ?? '-'}\nDesfase: ${countdown.gap != 0 ? countdown.gap : '-'}'),
       trailing: Text(
-        '${remaining.seconds}.${remaining.hundreds}',
+        remaining.getTimeString(),
         style: textTheme.titleLarge,
       ),
     );

@@ -3,6 +3,12 @@ class RemainingTime {
 
   final Duration duration;
 
+  String getTimeString() {
+    final h = int.tryParse(hours) ?? 0;
+    final m = int.tryParse(minutes) ?? 0;
+    return '${h > 0 ? '$hours:' : ''}${m > 0 ? '$minutes:' : ''}$seconds.$hundreds';
+  }
+
   String _fill(int n, {int count = 2}) => n.toString().padLeft(count, "0");
 
   /// Get the remaining days.
