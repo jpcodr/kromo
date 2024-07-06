@@ -30,9 +30,9 @@ class AudioNotifier extends AsyncNotifier<bool> {
       _player = Soundpool.fromOptions(options: _options);
       final ByteData soundData = await rootBundle.load('assets/audio/beep.mp3');
       _soundId = await _player!.load(soundData);
-      await _player!.setVolume(soundId: _soundId, volume: 0.0);
-      _soundStreamId = await _player!.play(_soundId!);
-      await _player!.setVolume(soundId: _soundId!, volume: 1.0);
+      // await _player!.setVolume(soundId: _soundId, volume: 0.0);
+      // _soundStreamId = await _player!.play(_soundId!);
+      // await _player!.setVolume(soundId: _soundId!, volume: 1.0);
 
       return true;
     } catch (e) {
