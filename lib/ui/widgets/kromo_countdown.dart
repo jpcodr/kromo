@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -111,7 +111,7 @@ class _KromoCountdownState extends ConsumerState<KromoCountdown>
     _currentAlert--;
 
     Future.delayed(const Duration(milliseconds: 100), () {
-      log('CLEAR ALERT');
+      // log('CLEAR ALERT');
       setState(() {
         _alerting = false;
         // ref.read(audioProvider.notifier).stop();
