@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kromo/data/models/countdown.dart';
 import 'package:kromo/data/models/remaining_time.dart';
+import 'package:kromo/data/utils.dart';
 import 'package:kromo/domain/providers/countdowns.dart';
 import 'package:kromo/domain/providers/settings.dart';
 import 'package:kromo/ui/screens/countdown/widgets/delete_countdown_dialog.dart';
@@ -64,9 +65,10 @@ class _CountdownFormState extends ConsumerState<CountdownForm> {
   }
 
   void _setTime() {
-    final int seconds = int.tryParse(_timeCtrl.text) ?? 0;
-    _remaining = RemainingTime(duration: Duration(seconds: seconds));
+    final double seconds = double.tryParse(_timeCtrl.text) ?? 0.0;
+    final int milliseconds = truncateToDecimalPlaces(seconds * 1000, 0).toInt();
 
+    _remaining = RemainingTime(duration: Duration(milliseconds: milliseconds));
     setState(() {});
   }
 
