@@ -9,7 +9,7 @@ An alternative multiplatform Pokémon RNG Timer. Inspired by [EonTimer](https://
 <br />
 
 ## Releases
-- Web: The latest release can be found under [here](https://jpcodr.github.io/kromo) 
+- Web: The latest release can be found under [here](https://jpcodr.github.io/kromo-web) 
 
 ## TO DO
 
