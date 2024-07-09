@@ -38,17 +38,17 @@ jobs:
         name: web-release
         path: ./build/web
   
-  prepare:
-    name: Prepare to deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: copy README.md
-      uses: canastro/copy-file-action@master
-      with:
-        source: "README.md"
-        target: "build/web/README.md"
+  #prepare:
+  #  name: Prepare to deploy
+  #  needs: build
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #  - uses: actions/checkout@master
+  #  - name: copy README.md
+  #    uses: canastro/copy-file-action@master
+  #    with:
+  #      source: "README.md"
+  #      target: "build/web/README.md"
 
   deploy:
     name: Deploy Web Build
