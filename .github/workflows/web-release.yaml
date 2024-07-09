@@ -52,7 +52,7 @@ jobs:
 
   deploy:
     name: Deploy Web Build
-    needs: prepare
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
