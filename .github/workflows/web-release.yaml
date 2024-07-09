@@ -43,8 +43,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Copy README.md
-      run: cp README.md build/web/
+    - uses: actions/checkout@master
+    - name: copy README.md
+      uses: canastro/copy-file-action@master
+      with:
+        source: "README.md"
+        target: "build/web/README.md"
 
   deploy:
     name: Deploy Web Build
