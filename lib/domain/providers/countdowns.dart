@@ -49,5 +49,8 @@ class CountdownsNotifier extends Notifier<List<Countdown>> {
       for (var c in state)
         if (c.id != id) c
     ];
+    ref.read(storageProvider).save(_fileName, {
+      'countdowns': state.map((el) => el.toMap()).toList(),
+    });
   }
 }
